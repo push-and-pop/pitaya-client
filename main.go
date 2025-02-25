@@ -8,8 +8,8 @@ import (
 	"time"
 
 	"github.com/sirupsen/logrus"
-	"github.com/topfreegames/pitaya/conn/message"
 	"github.com/topfreegames/pitaya/v3/pkg/client"
+	"github.com/topfreegames/pitaya/v3/pkg/conn/message"
 )
 
 var port = flag.Int("port", 3250, "the port to listen")
@@ -17,7 +17,7 @@ var port = flag.Int("port", 3250, "the port to listen")
 func main() {
 	flag.Parse()
 	c := client.New(logrus.InfoLevel)
-	err := c.ConnectTo(fmt.Sprintf("localhost:%d", port))
+	err := c.ConnectTo(fmt.Sprintf("localhost:%d", *port))
 	if err != nil {
 		logrus.Panicln(err)
 		return
@@ -51,7 +51,7 @@ func TestHandlerCallToFront(c *client.Client) {
 		}
 
 		msg := ShouldEventuallyReceive(c.IncomingMsgChan).(*message.Message)
-		logrus.Infoln(msg)
+		logrus.Infoln(string(msg.Data))
 	}
 
 	for {
